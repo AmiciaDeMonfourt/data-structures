@@ -1,10 +1,11 @@
 package hmap
 
-import "fmt"
+import (
+	"fmt"
+)
 
-//2 8 256 512 1024 2048 5096
 var (
-	cap = 5096 // table capacity
+	cap = 5 // table capacity
 )
 
 type hmap struct {
@@ -38,6 +39,16 @@ func (m *hmap) Search(key string) interface{} {
 	}
 
 	return m.schema[hash].Search(key)
+}
+
+func (m *hmap) Delete(key string) {
+	hash := hashcode(key)
+
+	if m.schema[hash] == nil {
+		panic(fmt.Sprintf("unknown record, key: %s", key))
+	}
+
+	m.schema[hash].Pull(key)
 }
 
 func (m *hmap) Print() {

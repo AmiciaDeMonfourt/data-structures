@@ -5,6 +5,8 @@ import (
 	"fmt"
 	"testing"
 	"time"
+
+	"github.com/stretchr/testify/assert"
 )
 
 func TestInsert(t *testing.T) {
@@ -17,14 +19,46 @@ func TestInsert(t *testing.T) {
 	m.Print()
 }
 
+func TestRemove(t *testing.T) {
+	m := hmap.NewMap()
+
+	for i := range 10 {
+		m.Insert(fmt.Sprintf("test%d", i), i)
+	}
+
+	assert.Equal(t, 5, m.Search("test5"))
+
+	m.Delete("test5")
+
+	assert.Panics(t, func() {
+		m.Search("test5")
+	})
+
+	// m.Print()
+}
+
 func TestSearch(t *testing.T) {
 	m := hmap.NewMap()
 
-	for i := range 50_000_0 {
+	for i := range 10 {
+		m.Insert(fmt.Sprintf("test%d", i), i)
+	}
+
+	assert.Equal(t, 5, m.Search("test5"))
+
+	assert.Panics(t, func() {
+		m.Search("panic")
+	})
+}
+
+func TestSearchRate(t *testing.T) {
+	m := hmap.NewMap()
+
+	for i := range 10_000_0 {
 		m.Insert(fmt.Sprintf("test%d", i), i)
 	}
 
 	start := time.Now()
-	fmt.Println("res: \n", m.Search("test56"))
-	fmt.Println("search from 50_000_0 elements: ", time.Since(start).Microseconds(), "ms")
+	fmt.Println("res: \n", m.Search("test34534"))
+	fmt.Println("search from 50_000_0 elements: ", time.Since(start).Microseconds(), "ms. Capacity 256")
 }
