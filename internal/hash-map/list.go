@@ -39,7 +39,7 @@ func (l *List) Push(key string, val interface{}) {
 	}
 }
 
-// remove element from lsit
+// remove an element from the list
 func (l *List) Pull(key string) {
 	cursor := l.head
 	if cursor.key == key {
@@ -58,6 +58,20 @@ func (l *List) Pull(key string) {
 	}
 
 	panic("hmap.delete(): key is not found")
+}
+
+func (l *List) Search(key string) interface{} {
+	cursor := l.head
+
+	for cursor != nil {
+		if cursor.key == key {
+			// fmt.Println(cursor.val)
+			return cursor.val
+		}
+		cursor = cursor.next
+	}
+
+	panic(fmt.Sprintf("unknown record, key: %s", key))
 }
 
 func (l *List) Print() (items []string) {
