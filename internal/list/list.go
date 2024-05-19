@@ -5,6 +5,7 @@ import (
 	"log"
 )
 
+// doubly linked list
 type List struct {
 	head *Node
 	tail *Node
@@ -19,7 +20,7 @@ func NewList() *List {
 	}
 }
 
-func (l *List) PushAfterItem(data interface{}, index uint) {
+func (l *List) PushAfterNode(data interface{}, index uint) {
 	node := newNode(data)
 
 	if l.size == 0 {
@@ -47,7 +48,7 @@ func (l *List) PushAfterItem(data interface{}, index uint) {
 	l.size++
 }
 
-func (l *List) PushBeforeItem(data interface{}, index uint) {
+func (l *List) PushBeforeNode(data interface{}, index uint) {
 	node := newNode(data)
 
 	// if list is empty - replace just replace new node with head

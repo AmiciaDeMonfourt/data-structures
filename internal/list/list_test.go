@@ -14,7 +14,7 @@ func TestTiming(t *testing.T) {
 	start := time.Now()
 
 	for i := 1; i < 10_000_0; i++ {
-		list.PushAfterItem("test", uint(i-24))
+		list.PushAfterNode("test", uint(i-24))
 
 	}
 
