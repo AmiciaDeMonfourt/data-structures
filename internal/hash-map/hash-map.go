@@ -5,9 +5,10 @@ import (
 )
 
 var (
-	cap = 5 // table capacity
+	cap = 256 // table capacity
 )
 
+// Associative array based on singly linked lists.
 type hmap struct {
 	schema []*List
 	size   int64

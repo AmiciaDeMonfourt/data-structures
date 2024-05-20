@@ -9,7 +9,7 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-func TestInsert(t *testing.T) {
+func TestHashMap_Insert(t *testing.T) {
 	m := hmap.NewMap()
 
 	for i := range 10 {
@@ -19,7 +19,7 @@ func TestInsert(t *testing.T) {
 	m.Print()
 }
 
-func TestRemove(t *testing.T) {
+func TestHashMap_Remove(t *testing.T) {
 	m := hmap.NewMap()
 
 	for i := range 10 {
@@ -37,7 +37,7 @@ func TestRemove(t *testing.T) {
 	// m.Print()
 }
 
-func TestSearch(t *testing.T) {
+func TestHashMap_Search(t *testing.T) {
 	m := hmap.NewMap()
 
 	for i := range 10 {
@@ -51,7 +51,7 @@ func TestSearch(t *testing.T) {
 	})
 }
 
-func TestSearchRate(t *testing.T) {
+func TestHashMap_SearchRate(t *testing.T) {
 	m := hmap.NewMap()
 
 	for i := range 10_000_0 {
