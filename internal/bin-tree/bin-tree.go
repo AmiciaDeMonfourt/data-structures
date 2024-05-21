@@ -13,10 +13,53 @@ func New() *BinaryTree {
 	}
 }
 
-// Insert new item in binary tree
+// Insert new item in binary tree, using recursive
 // Insert into an empty place, that finded by rule:
 // if new node key > current subtree root key -> descent to the right. Else descent to the left
 func (t *BinaryTree) Insert(data interface{}, key int) {
+	newNode := newNode(data, key)
+	cursor := t.root
+
+	if cursor == nil {
+		t.root = newNode
+		return
+	}
+
+	var insertion func(cursor *node)
+
+	insertion = func(cursor *node) {
+		// if tree has a node with own key yet, replace it
+		if key == cursor.Key {
+			cursor.Data = data
+			return
+
+		} else if key > cursor.Key {
+			// if the place is free, insert new item
+			if cursor.Right == nil {
+				cursor.Right = newNode
+				return
+			}
+			// else descent to the right
+			insertion(cursor.Right)
+			return
+
+		} else if key < cursor.Key {
+			// if the left place is free, insert new item
+			if cursor.Left == nil {
+				cursor.Left = newNode
+				return
+			}
+			// else descent to the left
+			insertion(cursor.Left)
+			return
+		}
+	}
+
+	insertion(cursor)
+}
+
+// Insert function without using recursive
+func (t *BinaryTree) InsertWithoutRecursive(data interface{}, key int) {
 	newNode := newNode(data, key)
 	cursor := t.root
 	height := 0
@@ -24,7 +67,6 @@ func (t *BinaryTree) Insert(data interface{}, key int) {
 	if cursor == nil {
 		t.root = newNode
 		return
-
 	} else {
 		for {
 			height++
