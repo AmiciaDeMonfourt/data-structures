@@ -8,6 +8,12 @@ var (
 	cap = 256 // table capacity
 )
 
+/*
+
+	TODO: Refactror all of this shit
+
+*/
+
 // Associative array based on singly linked lists.
 type hmap struct {
 	schema []*List

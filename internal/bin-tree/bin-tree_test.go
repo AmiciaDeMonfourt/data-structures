@@ -1,6 +1,7 @@
 package bintree
 
 import (
+	"fmt"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
@@ -18,33 +19,43 @@ func TestBinaryTree_Insert(t *testing.T) {
 	tree.Insert("data4", -1)
 	tree.Insert("data4", 18)
 
+	fmt.Println(tree.GetKeysInOrder())
+
 	assert.Equal(
 		t,
 		[]interface{}{6, 1, 0, -1, 2, 8, 9, 18},
-		tree.TraverseTree(),
+		tree.GetKeysInOrder(),
 	)
 }
 
-func TestBinaryTree_Search(t *testing.T) {
+func TestBinaryTree_SearchByKey(t *testing.T) {
 	tree := New()
 
 	assert.Panics(t, func() {
-		tree.Search(0)
+		tree.SearchByKey(0)
 	})
 	tree.Insert("6", 6)
 	tree.Insert("8", 8)
 	tree.Insert("1", 1)
 	tree.Insert("9", 9)
 
-	assert.Equal(t, "1", tree.Search(1))
+	assert.Equal(t, "1", tree.SearchByKey(1))
 
-	assert.Equal(t, "9", tree.Search(9))
+	assert.Equal(t, "9", tree.SearchByKey(9))
 
 	assert.NotEqual(t, "2", 6)
 
 	assert.Panics(t, func() {
-		tree.Search(18)
+		tree.SearchByKey(18)
 	})
+}
+
+func TestBinaryTree_SearchByKeys(t *testing.T) {
+	tree := getTestBinaryTree()
+
+	nodes := tree.SearchNodesByKeys([]int{1, 7, 11})
+
+	fmt.Println(nodes)
 }
 
 func TestBinaryTree_Delete(t *testing.T) {
@@ -52,38 +63,21 @@ func TestBinaryTree_Delete(t *testing.T) {
 
 	// delete node without childs
 	tree.Delete(7)
-	assert.Equal(t, []any{6, 1, 10, 8, 9, 11}, tree.TraverseTree())
+	assert.Equal(t, []any{6, 1, 10, 8, 9, 11}, tree.GetKeysInOrder())
 
 	// deleete node with only right child
 	tree.Delete(10)
-	assert.Equal(t, []any{6, 1, 11, 8, 9}, tree.TraverseTree())
+	assert.Equal(t, []any{6, 1, 11, 8, 9}, tree.GetKeysInOrder())
 
 	// delete node with 2 childs
 	tree.Delete(8)
-	assert.Equal(t, []any{6, 1, 11, 9}, tree.TraverseTree())
+	assert.Equal(t, []any{6, 1, 11, 9}, tree.GetKeysInOrder())
+
+	tree.Insert("t", 12)
 
 	// delete node with only left child
 	tree.Delete(11)
-	assert.Equal(t, []any{6, 1, 9}, tree.TraverseTree())
-}
-
-func TestBinaryTree_FindMinimum(t *testing.T) {
-	tree := getTestBinaryTree()
-
-	// minimal in tree
-	min, minParent := tree.findMinumum(tree.findNodeByKey(6))
-	assert.Equal(t, 1, min.Key)
-	assert.Equal(t, 6, minParent.Key)
-
-	// minimal in right root subtree
-	min, minParent = tree.findMinumum(tree.findNodeByKey(10))
-	assert.Equal(t, 7, min.Key)
-	assert.Equal(t, 8, minParent.Key)
-
-	// minimal in subtree, but substree has one node
-	min, minParent = tree.findMinumum(tree.findNodeByKey(11))
-	assert.Equal(t, 11, min.Key)
-	assert.Equal(t, 11, minParent.Key)
+	assert.Equal(t, []any{6, 1, 12, 9}, tree.GetKeysInOrder())
 }
 
 func getTestBinaryTree() *BinaryTree {

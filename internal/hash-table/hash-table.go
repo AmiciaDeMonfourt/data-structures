@@ -1,6 +1,6 @@
 package htable
 
-// Associated array based on trees
+// Associated array based on tree
 type htable struct {
 }
 
