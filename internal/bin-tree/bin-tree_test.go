@@ -1,61 +1,92 @@
 package bintree
 
 import (
-	"fmt"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
 )
 
 func TestBinaryTree_Insert(t *testing.T) {
-	tree := New()
-
-	tree.Insert("data1", 6)
-	tree.Insert("data2", 8)
-	tree.Insert("data3", 1)
-	tree.Insert("data4", 2)
-	tree.Insert("data5", 9)
-	tree.Insert("data5", 0)
-	tree.Insert("data4", -1)
-	tree.Insert("data4", 18)
-
-	fmt.Println(tree.GetKeysInOrder())
-
+	tree := getTestBinaryTree()
 	assert.Equal(
 		t,
-		[]interface{}{6, 1, 0, -1, 2, 8, 9, 18},
+		[]int{6, 1, 10, 8, 7, 9, 11},
 		tree.GetKeysInOrder(),
 	)
 }
 
+func TestBinaryTree_GetNodesInOrder(t *testing.T) {
+	tree := getTestBinaryTree()
+	assert.Equal(
+		t,
+		[]pair{{6, "6"}, {1, "1"}, {10, "10"}, {8, "8"}, {7, "7"}, {9, "9"}, {11, "11"}},
+		tree.GetNodesInOrder(),
+	)
+
+}
+
 func TestBinaryTree_SearchByKey(t *testing.T) {
-	tree := New()
+	tree := getTestBinaryTree()
+	testCases := []struct {
+		pair
+		isValid bool
+	}{
+		{
+			pair: pair{
+				key:  0,
+				data: "0",
+			},
+			isValid: false,
+		},
+		{
+			pair: pair{
+				key:  1,
+				data: "1",
+			},
+			isValid: true,
+		},
+		{
+			pair: pair{
+				key:  6,
+				data: "6",
+			},
+			isValid: true,
+		},
+	}
 
-	assert.Panics(t, func() {
-		tree.SearchByKey(0)
-	})
-	tree.Insert("6", 6)
-	tree.Insert("8", 8)
-	tree.Insert("1", 1)
-	tree.Insert("9", 9)
-
-	assert.Equal(t, "1", tree.SearchByKey(1))
-
-	assert.Equal(t, "9", tree.SearchByKey(9))
-
-	assert.NotEqual(t, "2", 6)
-
-	assert.Panics(t, func() {
-		tree.SearchByKey(18)
-	})
+	for _, tc := range testCases {
+		if tc.isValid {
+			assert.Equal(t, tc.pair, tree.SearchByKey(tc.key))
+		} else {
+			assert.Equal(t, pair{}, tree.SearchByKey(tc.key))
+		}
+	}
 }
 
 func TestBinaryTree_SearchByKeys(t *testing.T) {
 	tree := getTestBinaryTree()
 
-	nodes := tree.SearchNodesByKeys([]int{1, 7, 11})
+	nodes := tree.SearchNodesByKeys([]int{0, 1, 9, -24})
+	assert.Equal(t, []pair{{1, "1"}, {9, "9"}}, nodes)
 
-	fmt.Println(nodes)
+	nodes = tree.SearchNodesByKeys([]int{-24})
+	assert.Equal(t, []pair{}, nodes)
+}
+
+func TestBinaryTree_SearchNodesByData(t *testing.T) {
+	tree := getTestBinaryTree()
+
+	nodes := tree.SearchNodesByData([]any{"6", "11", "-412"})
+
+	assert.Equal(t, []pair{{6, "6"}, {11, "11"}}, nodes)
+}
+
+func TestBinaryTree_SearchNodesByKeys(t *testing.T) {
+	tree := getTestBinaryTree()
+
+	nodes := tree.SearchNodesByKeys([]int{6, 9, -7777})
+
+	assert.Equal(t, []pair{{6, "6"}, {9, "9"}}, nodes)
 }
 
 func TestBinaryTree_Delete(t *testing.T) {
@@ -63,21 +94,21 @@ func TestBinaryTree_Delete(t *testing.T) {
 
 	// delete node without childs
 	tree.Delete(7)
-	assert.Equal(t, []any{6, 1, 10, 8, 9, 11}, tree.GetKeysInOrder())
+	assert.Equal(t, []int{6, 1, 10, 8, 9, 11}, tree.GetKeysInOrder())
 
 	// deleete node with only right child
 	tree.Delete(10)
-	assert.Equal(t, []any{6, 1, 11, 8, 9}, tree.GetKeysInOrder())
+	assert.Equal(t, []int{6, 1, 11, 8, 9}, tree.GetKeysInOrder())
 
 	// delete node with 2 childs
 	tree.Delete(8)
-	assert.Equal(t, []any{6, 1, 11, 9}, tree.GetKeysInOrder())
+	assert.Equal(t, []int{6, 1, 11, 9}, tree.GetKeysInOrder())
 
 	tree.Insert("t", 12)
 
 	// delete node with only left child
 	tree.Delete(11)
-	assert.Equal(t, []any{6, 1, 12, 9}, tree.GetKeysInOrder())
+	assert.Equal(t, []int{6, 1, 12, 9}, tree.GetKeysInOrder())
 }
 
 func getTestBinaryTree() *BinaryTree {

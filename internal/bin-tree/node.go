@@ -99,9 +99,9 @@ func (n *node) searchByKey(key int) *node {
 	}
 
 	if key > n.key {
-		n.right = n.right.searchByKey(key)
+		return n.right.searchByKey(key)
 	} else if key < n.key {
-		n.left = n.left.searchByKey(key)
+		return n.left.searchByKey(key)
 	}
 
 	return n
@@ -147,15 +147,15 @@ func (n *node) searchNodesByData(data []interface{}) []pair {
 		}
 	}
 	n.traversalWithAction(callback)
-	return nil
+	return pairs
 }
 
 // Return all the nodes relatives to the current root
-func (n *node) nodeTraversal() []node {
-	nodes := make([]node, 0)
+func (n *node) nodeTraversal() []pair {
+	nodes := make([]pair, 0)
 	// adds copy of the node
 	callback := func(node *node) {
-		nodes = append(nodes, *node)
+		nodes = append(nodes, node.pair)
 	}
 	n.traversalWithAction(callback)
 	return nodes

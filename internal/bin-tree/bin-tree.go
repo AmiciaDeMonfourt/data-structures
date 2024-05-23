@@ -18,8 +18,12 @@ func (t *BinaryTree) Delete(key int) {
 	t.root = t.root.remove(key)
 }
 
-func (t *BinaryTree) SearchByKey(key int) *node {
-	return t.root.searchByKey(key)
+func (t *BinaryTree) SearchByKey(key int) pair {
+	node := t.root.searchByKey(key)
+	if node != nil {
+		return node.pair
+	}
+	return pair{}
 }
 
 func (t *BinaryTree) SearchNodesByData(data []any) []pair {
@@ -30,7 +34,7 @@ func (t *BinaryTree) SearchNodesByKeys(keys []int) []pair {
 	return t.root.searchNodesByKeys(keys)
 }
 
-func (t *BinaryTree) GetNodesInOrder() []node {
+func (t *BinaryTree) GetNodesInOrder() []pair {
 	return t.root.nodeTraversal()
 }
 
